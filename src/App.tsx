@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Pokemon, Form } from './types';
+import { Pokemon, Form } from './types/types';
 import Loader from './components/Loader';
-import api from './api';
+import api from './services/api';
 
 const App = () => {
   const [hasWon, toggleWon] = useState(false);
@@ -9,20 +9,20 @@ const App = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    api
-      .random()
-      .then(setPokemon)
-      .finally(() => setLoading(false));
+    setTimeout(() => {
+      api
+        .random()
+        .then(setPokemon)
+        .finally(() => setLoading(false));
+    }, 1500);
   }, []);
   
-  console.log(pokemon);
-
   const handleSubmit = (event: React.FormEvent<Form>) => {
     event.preventDefault();
 
     const {answer} = event.currentTarget;
 
-    if (answer.value.toLowerCase() === pokemon?.name) {
+    if (answer.value.replace(/\s/g, '').toLowerCase() === pokemon?.name) {
       toggleWon(true);
       alert('You won!');
     } else {
@@ -41,11 +41,14 @@ const App = () => {
           style={{filter: hasWon ? '' : 'brightness(0)'}}
         />
         {hasWon ? (
-          <button onClick={() => location.reload()} className='nes-btn is-success'>Play again</button>
+          <div className='nes-field'>
+            <input type='text' className='nes-input is-success' value={pokemon?.name} style={{textTransform: 'capitalize'}} readOnly/>
+            <button onClick={() => location.reload()} className='nes-btn is-success'>Play again</button>
+          </div>
           ) : (
             <form onSubmit={handleSubmit}>
             <div className='nes-field'>
-              <input type='text' id='answer' className='nes-input' autoFocus placeholder='Pikachu...'/>
+              <input type='text' id='answer' className='nes-input' placeholder='Pikachu...' autoFocus />
               <button type='submit' className='nes-btn is-primary'>Guess</button>
             </div>
           </form>
