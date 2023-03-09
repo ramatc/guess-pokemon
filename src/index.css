@@ -6,15 +6,36 @@
 
 body {
     background-color: #f6f6f6;
+    min-height: 75vh;
+    min-height: 100vh;
+}
+
+header {
+    border-bottom: 4px solid black;
+    background: #ffdf6dbd;
+}
+
+header h1 {
+    padding: 15px;
+}
+
+h2 {
+    text-align: center;
+    color: #fff;
 }
 
 main {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
     flex-direction: column;
     padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-image: url(https://pbs.twimg.com/media/DVMT-6OXcAE2rZY?format=jpg&name=medium);
+    background-size: cover;
+    border-radius: 10px;
+    margin-top: 120px;
 }
 
 img {
@@ -39,10 +60,40 @@ img {
     height: 420px;
     display: flex;
     margin: 0 auto;
+    transition: filter 1.5s;
+    animation: move 5s linear infinite;
 }
 
-.guess-box {
-    background-image: url(https://pbs.twimg.com/media/DVMT-6OXcAE2rZY?format=jpg&name=medium);
-    background-size: cover;
-    border-radius: 5px;
+button {
+    height: 68px;
+}
+
+input {
+    outline: none;
+}
+
+.hearts {
+    margin-top: 12px;
+}
+
+@keyframes move {
+    0% {
+        transform: translateY(0)
+    }
+
+    25% {
+        transform: translateY(-10px)
+    }
+
+    50% {
+        transform: translateY(0)
+    }
+
+    75% {
+        transform: translateY(10px)
+    }
+
+    to {
+        transform: translateY(0)
+    }
 }
