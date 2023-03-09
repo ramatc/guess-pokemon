@@ -3,12 +3,18 @@ import { Pokemon, Form } from './types/types';
 import Loader from './components/Loader';
 import api from './services/api';
 
+import win from './assets/audios/win.mp3';
+import lose from './assets/audios/lose.mp3';
+
 const App = () => {
     const [hasWon, toggleWon] = useState(false);
     const [pokemon, setPokemon] = useState<Pokemon>();
     // const [test, setTest] = useState(false);
     const [count, setCount] = useState({ hits: 0, errors: 0 });
     const [loading, setLoading] = useState<boolean>(true);
+
+    const winAudio = new Audio(win);
+    const loseAudio = new Audio(lose);
 
     useEffect(() => {
         setTimeout(() => {
@@ -26,18 +32,22 @@ const App = () => {
 
         if (answer.value.replace(/\s/g, '').toLowerCase() === pokemon?.name) {
             toggleWon(true);
-            alert('You won!');
+            // alert('You won!');
+            winAudio.play();
+            winAudio.volume = 0.3;
             setCount({ ...count, hits: count.hits + 1 });
         } else {
-            alert('Wrong answer :(');
+            // alert('Wrong answer :(');
+            loseAudio.play();
+            loseAudio.volume = 0.3;
             setCount({ ...count, errors: count.errors + 1 });
         }
     }
 
-    const handleClick = () => {
-        toggleWon(false);
-        // setTest(!test);
-    }
+    // const handleClick = () => {
+    //     toggleWon(false);
+    //     setTest(!test);
+    // }
 
     if (loading) return <Loader />;
 
@@ -46,7 +56,7 @@ const App = () => {
             <header>
                 <h1>Guess Pokémon</h1>
             </header>
-            
+
             <main>
                 <h2 className='nes-text'>Who's that Pokémon?</h2> 
                 <div className='guess-box'>
@@ -73,9 +83,9 @@ const App = () => {
 
                 {/* <p>hits: {count.hits}, errors: {count.errors}</p> */}
                 <div className='hearts'>
-                    <i className='nes-icon is-large heart'></i>
-                    <i className='nes-icon is-large heart is-half'></i>
-                    <i className='nes-icon is-large heart is-transparent'></i>
+                    <i className={`nes-icon is-large heart ${count.errors > 2 && 'is-transparent'}`}></i>
+                    <i className={`nes-icon is-large heart ${count.errors > 1 && 'is-transparent'}`}></i>
+                    <i className={`nes-icon is-large heart ${count.errors > 0 && 'is-transparent'}`}></i>
                 </div>
             </main>
         </>

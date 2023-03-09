@@ -12,7 +12,8 @@ body {
 
 header {
     border-bottom: 4px solid black;
-    background: #ffdf6dbd;
+    background: #ed4242e3;
+    text-align: center;
 }
 
 header h1 {
