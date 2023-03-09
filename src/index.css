@@ -6,7 +6,6 @@
 
 body {
     background-color: #f6f6f6;
-    min-height: 75vh;
     min-height: 100vh;
 }
 
@@ -26,6 +25,7 @@ h2 {
 }
 
 main {
+    border: 20px solid #061628;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -75,6 +75,16 @@ input {
 
 .hearts {
     margin-top: 12px;
+}
+
+.lists {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+span {
+    text-transform: capitalize;
 }
 
 @keyframes move {

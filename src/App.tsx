@@ -10,7 +10,7 @@ const App = () => {
     const [hasWon, toggleWon] = useState(false);
     const [pokemon, setPokemon] = useState<Pokemon>();
     // const [test, setTest] = useState(false);
-    const [count, setCount] = useState({ hits: 0, errors: 0 });
+    const [errors, setErrors] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
 
     const winAudio = new Audio(win);
@@ -24,23 +24,25 @@ const App = () => {
                 .finally(() => setLoading(false));
         }, 1500);
     }, []);
+    
+    console.log(pokemon);
 
     const handleSubmit = (event: React.FormEvent<Form>) => {
         event.preventDefault();
 
         const { answer } = event.currentTarget;
+        
+        if(answer.value === '' || answer.value.startsWith(' ') || errors === 3) return;
 
         if (answer.value.replace(/\s/g, '').toLowerCase() === pokemon?.name) {
-            toggleWon(true);
-            // alert('You won!');
             winAudio.play();
             winAudio.volume = 0.3;
-            setCount({ ...count, hits: count.hits + 1 });
+            toggleWon(true);
         } else {
-            // alert('Wrong answer :(');
             loseAudio.play();
             loseAudio.volume = 0.3;
-            setCount({ ...count, errors: count.errors + 1 });
+            setErrors(prev => prev + 1);
+            event.currentTarget.answer.value = '';
         }
     }
 
@@ -63,12 +65,12 @@ const App = () => {
                     <img
                         src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon?.id}.png`}
                         className='pokemon-img'
-                        style={{ filter: hasWon ? '' : 'brightness(0)' }}
+                        style={{ filter: hasWon || errors === 3 ? '' : 'brightness(0)' }}
                     />
-                    {hasWon ? (
+                    {hasWon || errors === 3 ? (
                         <div className='nes-field'>
-                            <input type='text' className='nes-input is-success' value={pokemon?.name} style={{ textTransform: 'capitalize' }} readOnly />
-                            <button onClick={() => location.reload()} className='nes-btn is-success'>Play again</button>
+                            <input type='text' className={`nes-input ${errors === 3 ? 'is-error': 'is-success'}`} value={pokemon?.name} style={{ textTransform: 'capitalize' }} readOnly />
+                            <button onClick={() => location.reload()} className={`nes-btn ${errors === 3 ? 'is-error': 'is-success'}`}>Play again</button>
                             {/* <button onClick={handleClick} className='nes-btn is-success'>Play again</button> */}
                         </div>
                     ) : (
@@ -81,13 +83,20 @@ const App = () => {
                     )}
                 </div>
 
-                {/* <p>hits: {count.hits}, errors: {count.errors}</p> */}
                 <div className='hearts'>
-                    <i className={`nes-icon is-large heart ${count.errors > 2 && 'is-transparent'}`}></i>
-                    <i className={`nes-icon is-large heart ${count.errors > 1 && 'is-transparent'}`}></i>
-                    <i className={`nes-icon is-large heart ${count.errors > 0 && 'is-transparent'}`}></i>
+                    <i className={`nes-icon is-large heart ${errors > 2 && 'is-transparent'}`}></i>
+                    <i className={`nes-icon is-large heart ${errors > 1 && 'is-transparent'}`}></i>
+                    <i className={`nes-icon is-large heart ${errors > 0 && 'is-transparent'}`}></i>
                 </div>
             </main>
+
+            <div className='lists'>
+                <ul className='nes-list is-disc'>
+                    {errors > 0 && !hasWon && <li>The name starts with: {pokemon?.name[0].toUpperCase()}</li>}
+                    {errors > 1 && !hasWon && <li>The name ends with: {pokemon?.name[pokemon.name.length-1]}</li>}
+                    {errors > 2 && !hasWon && <li>The pokémon is <span>{pokemon?.name}</span></li>}
+                </ul>
+            </div>
         </>
     )
 }
