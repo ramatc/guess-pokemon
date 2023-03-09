@@ -2,8 +2,8 @@ import {Pokemon} from '../types/types';
 
 export const POKEMON = [
   'bulbasaur',
-  // 'ivysaur',
-  // 'venusaur',
+  'ivysaur',
+  'venusaur',
   // 'charmander',
   // 'charmeleon',
   // 'charizard',
