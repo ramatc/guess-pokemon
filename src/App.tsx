@@ -9,7 +9,7 @@ import lose from './assets/audios/lose.mp3';
 const App = () => {
     const [hasWon, toggleWon] = useState(false);
     const [pokemon, setPokemon] = useState<Pokemon>();
-    // const [test, setTest] = useState(false);
+    const [game, setGame] = useState<boolean>(true);
     const [errors, setErrors] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -23,14 +23,14 @@ const App = () => {
                 .then(setPokemon)
                 .finally(() => setLoading(false));
         }, 1500);
-    }, []);
+    }, [game]);
     
     const handleSubmit = (event: React.FormEvent<Form>) => {
         event.preventDefault();
 
         const { answer } = event.currentTarget;
         
-        if(answer.value === '' || answer.value.startsWith(' ') || errors === 3) return;
+        if(answer.value === '' || answer.value.startsWith(' ')) return;
 
         if (answer.value.replace(/\s/g, '').toLowerCase() === pokemon?.name) {
             winAudio.play();
@@ -44,10 +44,12 @@ const App = () => {
         }
     }
 
-    // const handleClick = () => {
-    //     toggleWon(false);
-    //     setTest(!test);
-    // }
+    const handleClick = () => {
+        setLoading(true);
+        toggleWon(false);
+        setGame(!game);
+        setErrors(0);
+    }
 
     if (loading) return <Loader />;
 
@@ -65,11 +67,11 @@ const App = () => {
                         className='pokemon-img'
                         style={{ filter: hasWon || errors === 3 ? '' : 'brightness(0)' }}
                     />
+                    
                     {hasWon || errors === 3 ? (
                         <div className='nes-field'>
                             <input type='text' className={`nes-input ${errors === 3 ? 'is-error': 'is-success'}`} value={pokemon?.name} style={{ textTransform: 'capitalize' }} readOnly />
-                            <button onClick={() => location.reload()} className={`nes-btn ${errors === 3 ? 'is-error': 'is-success'}`}>Play again</button>
-                            {/* <button onClick={handleClick} className='nes-btn is-success'>Play again</button> */}
+                            <button onClick={handleClick} className={`nes-btn ${errors === 3 ? 'is-error': 'is-success'}`}>Play again</button>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit}>
