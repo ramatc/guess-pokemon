@@ -25,8 +25,6 @@ const App = () => {
         }, 1500);
     }, []);
     
-    console.log(pokemon);
-
     const handleSubmit = (event: React.FormEvent<Form>) => {
         event.preventDefault();
 
