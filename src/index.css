@@ -108,3 +108,30 @@ span {
         transform: translateY(0)
     }
 }
+
+@media (max-width: 532px){
+    main {
+        margin-top: 0;
+        border: none;
+        background-image: none;
+    }
+
+    body {
+        background-image: url(https://pbs.twimg.com/media/DVMT-6OXcAE2rZY?format=jpg&name=medium);
+        background-size: cover;
+    }
+    
+    .pokemon-img {
+        height: 350px;
+        width: 350px;
+    }
+
+    .nes-field {
+        width: auto;
+    }
+    
+    li {
+        color: #f6f6f6;
+        font-size: 15px;
+    }
+}
